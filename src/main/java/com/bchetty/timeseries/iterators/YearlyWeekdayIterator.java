@@ -21,4 +21,9 @@ public class YearlyWeekdayIterator implements TimeSeriesIterator {
     public Date next() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
+    @Override
+    public void remove() {
+        throw new UnsupportedOperationException();
+    }
 }

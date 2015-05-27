@@ -2,6 +2,8 @@ package com.bchetty.timeseries.iterators;
 
 import com.bchetty.timeseries.TimeSeries;
 import com.bchetty.timeseries.TimeSeries.Monthly.MonthlyWeekday;
+import com.bchetty.timeseries.utils.enums.Month;
+import com.bchetty.timeseries.utils.misc.DateTimeUtils;
 import java.util.Date;
 import java.util.NoSuchElementException;
 import org.joda.time.DateTime;
@@ -13,7 +15,8 @@ import org.joda.time.DateTime;
 public class MonthlyWeekdayIterator implements TimeSeriesIterator {
     private final DateTime endDateTime;
     private DateTime currentDateTime;
-    private int monthIncrement;    
+    private MonthlyWeekday monthlyWeekday;
+    private int monthIncrement;
     
     public MonthlyWeekdayIterator(TimeSeries timeSeries) {
         if(timeSeries != null && timeSeries.getBeginDate() != null && timeSeries.getEndDate() != null) {            
@@ -21,10 +24,12 @@ public class MonthlyWeekdayIterator implements TimeSeriesIterator {
             this.endDateTime = new DateTime(timeSeries.getEndDate());
             TimeSeries.Monthly monthly = timeSeries.getMonthly();
             if(monthly != null) {
-                MonthlyWeekday monthlyWeekday = monthly.getMonthlyWeekday();
+                monthlyWeekday = monthly.getMonthlyWeekday();
                 if(monthlyWeekday != null) {
-                    this.monthIncrement = monthlyWeekday.getIncrement();                    
-                    currentDateTime = currentDateTime.withDayOfWeek(monthlyWeekday.getWeekday().ordinal());
+                    monthIncrement = monthlyWeekday.getIncrement();
+                    Month month = Month.values()[currentDateTime.getMonthOfYear()];
+                    currentDateTime = DateTimeUtils.getNthWeekdayOfMonth(currentDateTime.getYear(), month, 
+                            monthlyWeekday.getWeekday(), monthlyWeekday.getWeekOfMonth());
                     DateTime startDateTime = new DateTime(timeSeries.getBeginDate());
                     if(currentDateTime.isBefore(startDateTime)) {
                         currentDateTime = currentDateTime.plusMonths(monthIncrement);
@@ -45,7 +50,9 @@ public class MonthlyWeekdayIterator implements TimeSeriesIterator {
     public Date next() {
         if(this.hasNext()) {
             Date currentDate = currentDateTime.toDate();
-            currentDateTime = currentDateTime.plusMonths(monthIncrement);
+            Month month = Month.values()[currentDateTime.getMonthOfYear() + monthIncrement];
+            currentDateTime = DateTimeUtils.getNthWeekdayOfMonth(currentDateTime.getYear(), month, 
+                    monthlyWeekday.getWeekday(), monthlyWeekday.getWeekOfMonth());
             return currentDate;
         }
         

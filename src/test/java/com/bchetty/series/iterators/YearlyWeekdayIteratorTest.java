@@ -54,9 +54,9 @@ public class YearlyWeekdayIteratorTest {
     public void testNext1() {
         DateTime may282015 = new DateTime(2015,5,28,0,0);
         System.out.println("may282015 : " + may282015);
-        DateTime may282016 = new DateTime(2016,5,28,0,0);
-        System.out.println("may282016 : " + may282016);
-        TimeSeries timeSeries = new TimeSeries(may282015.toDate(), may282016.toDate());
+        DateTime may282017 = new DateTime(2017,5,28,0,0);
+        System.out.println("may282017 : " + may282017);
+        TimeSeries timeSeries = new TimeSeries(may282015.toDate(), may282017.toDate());
         
         TimeSeries.Yearly yearly = new TimeSeries.Yearly();
         YearlyWeekday yearlyWeekday = new YearlyWeekday();
@@ -73,6 +73,13 @@ public class YearlyWeekdayIteratorTest {
         assertTrue(dateTime1.getDayOfMonth() == 17);
         assertTrue(dateTime1.getMonthOfYear() == 6);
         assertTrue(dateTime1.getYear() == 2015);
+        
+        DateTime dateTime2 = new DateTime(yearlyWeekdayIterator.next());
+        System.out.println("dateTime2 : " + dateTime2);
+        assertTrue(dateTime2.getDayOfWeek() == (Weekday.WEDNESDAY.ordinal() + 1));
+        assertTrue(dateTime2.getDayOfMonth() == 15);
+        assertTrue(dateTime2.getMonthOfYear() == 6);
+        assertTrue(dateTime2.getYear() == 2016);
     }
     
     /**

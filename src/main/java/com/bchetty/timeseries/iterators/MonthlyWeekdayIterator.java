@@ -50,9 +50,16 @@ public class MonthlyWeekdayIterator implements TimeSeriesIterator {
     public Date next() {
         if(this.hasNext()) {
             Date currentDate = currentDateTime.toDate();
-            Month month = Month.values()[currentDateTime.getMonthOfYear() + monthIncrement];
-            currentDateTime = DateTimeUtils.getNthWeekdayOfMonth(currentDateTime.getYear(), month, 
-                    monthlyWeekday.getWeekday(), monthlyWeekday.getWeekOfMonth());
+            int monthEnumOrdinal = (currentDateTime.getMonthOfYear()-1) + monthIncrement;
+            int year = currentDateTime.getYear();
+            if(monthEnumOrdinal >= 12) {
+                monthEnumOrdinal = (monthEnumOrdinal - 12);
+                year += 1;
+            }
+            
+            Month month = Month.values()[monthEnumOrdinal];
+            currentDateTime = DateTimeUtils.getNthWeekdayOfMonth(year, month, monthlyWeekday.getWeekday(), 
+                    monthlyWeekday.getWeekOfMonth());
             return currentDate;
         }
         

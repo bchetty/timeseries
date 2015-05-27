@@ -70,7 +70,7 @@ public class DailyIteratorTest {
     @Test
     public void testLoop() {
         DateTime now = DateTime.now();
-        DateTime fiveDaysLater = now.plusDays(5);
+        DateTime fiveDaysLater = now.plusDays(5);        
         TimeSeries timeSeries = new TimeSeries(now.toDate(), fiveDaysLater.toDate());
         timeSeries.setPattern(TimeSeries.Pattern.DAILY);
         

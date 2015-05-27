@@ -1,5 +1,7 @@
 package com.bchetty.timeseries.utils.misc;
 
+import com.bchetty.timeseries.utils.enums.Month;
+import com.bchetty.timeseries.utils.enums.WeekOfMonth;
 import com.bchetty.timeseries.utils.enums.Weekday;
 import java.util.ArrayList;
 import java.util.Date;
@@ -50,5 +52,11 @@ public class DateTimeUtils {
         }
         
         return datesList;
+    }
+    
+    public static DateTime getNthWeekdayOfMonth(int year, Month month, Weekday weekday, WeekOfMonth weekOfMonth) {
+        DateTime firstDayOfMonthInThatYear = new DateTime().withYear(year).withMonthOfYear(month.ordinal() + 1).withDayOfMonth(1);
+        DateTime withWeekday = firstDayOfMonthInThatYear.withDayOfWeek(weekday.ordinal() + 1);
+        return withWeekday.isBefore(firstDayOfMonthInThatYear) ? withWeekday.plusWeeks(weekOfMonth.ordinal() + 1) : withWeekday.plusWeeks(weekOfMonth.ordinal());
     }
 }

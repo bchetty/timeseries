@@ -16,7 +16,7 @@ public class YearlyDayIterator implements TimeSeriesIterator {
     private int yearIncrement = 1;
     
     public YearlyDayIterator(TimeSeries timeSeries) {
-        if(timeSeries != null && timeSeries.getBeginDate() != null && timeSeries.getEndDate() != null) {            
+        if(timeSeries != null && timeSeries.getBeginDate() != null && timeSeries.getEndDate() != null) {
             this.currentDateTime = new DateTime(timeSeries.getBeginDate());
             this.endDateTime = new DateTime(timeSeries.getEndDate());
             TimeSeries.Yearly yearly = timeSeries.getYearly();
@@ -29,7 +29,7 @@ public class YearlyDayIterator implements TimeSeriesIterator {
                     if(currentDateTime.isBefore(startDateTime)) {
                         currentDateTime = currentDateTime.plusYears(yearIncrement);
                     }
-                }                
+                }
             }            
         } else {
             throw new IllegalStateException();

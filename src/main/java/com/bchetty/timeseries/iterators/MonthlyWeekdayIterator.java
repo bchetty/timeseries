@@ -29,7 +29,7 @@ public class MonthlyWeekdayIterator implements TimeSeriesIterator {
                     if(currentDateTime.isBefore(startDateTime)) {
                         currentDateTime = currentDateTime.plusMonths(monthIncrement);
                     }
-                }                
+                }
             }            
         } else {
             throw new IllegalStateException();

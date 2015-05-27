@@ -54,4 +54,9 @@ public class WeekdayIterator implements TimeSeriesIterator {
         
         throw new NoSuchElementException();
     }
+    
+    @Override
+    public void remove() {
+        throw new UnsupportedOperationException();
+    }
 }

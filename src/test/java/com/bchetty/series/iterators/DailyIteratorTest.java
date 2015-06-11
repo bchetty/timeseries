@@ -4,7 +4,6 @@ import com.bchetty.timeseries.iterators.TimeSeriesIterator;
 import com.bchetty.timeseries.TimeSeries;
 import java.util.Date;
 import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

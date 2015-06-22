@@ -3,6 +3,7 @@ package com.bchetty.series.iterators;
 import com.bchetty.timeseries.TimeSeries;
 import com.bchetty.timeseries.TimeSeries.Monthly;
 import com.bchetty.timeseries.TimeSeries.Monthly.MonthlyWeekday;
+import com.bchetty.timeseries.TimeSeries.Pattern;
 import com.bchetty.timeseries.iterators.MonthlyWeekdayIterator;
 import com.bchetty.timeseries.utils.enums.WeekOfMonth;
 import com.bchetty.timeseries.utils.enums.Weekday;
@@ -41,7 +42,7 @@ public class MonthlyWeekdayIteratorTest {
     public void testHasNext() {
         DateTime may282015 = new DateTime(2015,5,28,0,0);        
         DateTime may282016 = new DateTime(2016,5,28,0,0);
-        TimeSeries timeSeries = new TimeSeries(may282015.toDate(), may282016.toDate());   
+        TimeSeries timeSeries = new TimeSeries(may282015.toDate(), may282016.toDate(), Pattern.DAILY);   
         
         MonthlyWeekdayIterator monthlyWeekdayIterator = new MonthlyWeekdayIterator(timeSeries);
         assertTrue(monthlyWeekdayIterator.hasNext());

@@ -34,17 +34,19 @@ public class TimeSeries implements Serializable, Iterable<Date> {
     private Monthly monthly;
     private Yearly yearly;
     
-    public TimeSeries(Date beginDate, Date endDate, Pattern pattern) {
+    public TimeSeries(Date beginDate, Date endDate, Pattern pattern) {        
         this.beginDate = beginDate;
         this.endDate = endDate;
-        if(pattern != null) {
-            this.pattern = pattern;
-        }        
+        this.pattern = pattern;
         init(beginDate);
     }
     
-    public TimeSeries(Date beginDate, Date endDate) {
+    public TimeSeries(Date beginDate, Date endDate) {        
         this(beginDate, endDate, null);
+    }
+    
+    public TimeSeries(Date beginDate) {        
+        this(beginDate, null, null);
     }
     
     private void init(Date date) {

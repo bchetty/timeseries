@@ -2,6 +2,7 @@ package com.bchetty.timeseries.iterators;
 
 import com.bchetty.timeseries.TimeSeries;
 import com.bchetty.timeseries.TimeSeries.Monthly.MonthlyDay;
+import com.bchetty.timeseries.utils.misc.DateTimeUtils;
 import java.util.Date;
 import java.util.NoSuchElementException;
 import org.joda.time.DateTime;
@@ -13,7 +14,8 @@ import org.joda.time.DateTime;
 public class MonthlyDayIterator implements TimeSeriesIterator {
     private final DateTime endDateTime;
     private DateTime currentDateTime;
-    private int monthIncrement;    
+    private int monthIncrement;
+    private int day;
     
     public MonthlyDayIterator(TimeSeries timeSeries) {
         if(timeSeries != null && timeSeries.getBeginDate() != null && timeSeries.getEndDate() != null) {            
@@ -22,14 +24,18 @@ public class MonthlyDayIterator implements TimeSeriesIterator {
             TimeSeries.Monthly monthly = timeSeries.getMonthly();
             if(monthly != null) {
                 MonthlyDay monthlyDay = monthly.getMonthlyDay();
+                day = monthlyDay.getDay();
+                if(day > 31) {
+                    throw new IllegalStateException();                    
+                }
                 if(monthlyDay != null) {
                     this.monthIncrement = monthlyDay.getIncrement();
-                    currentDateTime = currentDateTime.withDayOfMonth(monthlyDay.getDay());
+                    currentDateTime = DateTimeUtils.getMonthWithDay(currentDateTime, day, monthIncrement);
                     DateTime startDateTime = new DateTime(timeSeries.getBeginDate());
                     if(currentDateTime.isBefore(startDateTime)) {
-                        currentDateTime = currentDateTime.plusMonths(monthIncrement);
+                        currentDateTime = DateTimeUtils.getMonthWithDay(currentDateTime.plusMonths(monthIncrement), day, monthIncrement);
                     }
-                }                
+                }
             }            
         } else {
             throw new IllegalStateException();
@@ -45,7 +51,7 @@ public class MonthlyDayIterator implements TimeSeriesIterator {
     public Date next() {
         if(this.hasNext()) {
             Date currentDate = currentDateTime.toDate();
-            currentDateTime = currentDateTime.plusMonths(monthIncrement);
+            currentDateTime = DateTimeUtils.getMonthWithDay(currentDateTime.plusMonths(monthIncrement), day, monthIncrement);
             return currentDate;
         }
         

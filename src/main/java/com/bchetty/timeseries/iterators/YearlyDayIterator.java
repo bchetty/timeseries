@@ -2,6 +2,7 @@ package com.bchetty.timeseries.iterators;
 
 import com.bchetty.timeseries.TimeSeries;
 import com.bchetty.timeseries.TimeSeries.Yearly.YearlyDay;
+import com.bchetty.timeseries.utils.misc.DateTimeUtils;
 import java.util.Date;
 import java.util.NoSuchElementException;
 import org.joda.time.DateTime;
@@ -21,13 +22,14 @@ public class YearlyDayIterator implements TimeSeriesIterator {
             this.endDateTime = new DateTime(timeSeries.getEndDate());
             TimeSeries.Yearly yearly = timeSeries.getYearly();
             if(yearly != null) {
-                YearlyDay yearlyDay = yearly.getYearlyDay();
+                YearlyDay yearlyDay = yearly.getYearlyDay();                
                 if(yearlyDay != null) {
-                    currentDateTime = currentDateTime.withMonthOfYear(yearlyDay.getMonth().getMonth())
-                                                     .withDayOfMonth(yearlyDay.getDay());
+                    currentDateTime = DateTimeUtils.getYearWithMonthAndDay(currentDateTime, yearlyDay.getMonth().getMonth(), 
+                            yearlyDay.getDay(), yearIncrement);                    
                     DateTime startDateTime = new DateTime(timeSeries.getBeginDate());
-                    if(currentDateTime.isBefore(startDateTime)) {
-                        currentDateTime = currentDateTime.plusYears(yearIncrement);
+                    if(currentDateTime != null && currentDateTime.isBefore(startDateTime)) {
+                        currentDateTime = DateTimeUtils.getYearWithMonthAndDay(currentDateTime.plusYears(yearIncrement), 
+                                currentDateTime.getMonthOfYear(), currentDateTime.getDayOfMonth(), yearIncrement);
                     }
                 }
             }            
@@ -38,14 +40,15 @@ public class YearlyDayIterator implements TimeSeriesIterator {
     
     @Override
     public boolean hasNext() {
-        return !currentDateTime.isAfter(endDateTime);
+        return (currentDateTime != null && !currentDateTime.isAfter(endDateTime));
     }
 
     @Override
     public Date next() {
         if(this.hasNext()) {
             Date currentDate = currentDateTime.toDate();
-            currentDateTime = currentDateTime.plusYears(yearIncrement);
+            currentDateTime = DateTimeUtils.getYearWithMonthAndDay(currentDateTime.plusYears(yearIncrement), 
+                    currentDateTime.getMonthOfYear(), currentDateTime.getDayOfMonth(), yearIncrement);
             return currentDate;
         }
         
